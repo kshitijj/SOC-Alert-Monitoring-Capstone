@@ -1,266 +1,302 @@
 # 🛡️ SOC Alert Monitoring & Log Correlation Capstone
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
-![Windows](https://img.shields.io/badge/Windows-11-0078D6?logo=windows)
-![Sysmon](https://img.shields.io/badge/Sysmon-Microsoft-green)
-![Wireshark](https://img.shields.io/badge/Wireshark-Network%20Analysis-blue?logo=wireshark)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-red)
-![VMware](https://img.shields.io/badge/VMware-Workstation-orange)
+**A hands-on SOC investigation simulation — endpoint, network, and authentication log correlation with automated analysis and reporting.**
 
-> **A practical Blue Team cybersecurity project demonstrating endpoint monitoring, log correlation, network traffic analysis, MITRE ATT&CK mapping, IOC extraction, and automated incident reporting.**
-
----
-
-# 📌 Project Overview
-
-This project simulates the responsibilities of a Tier-1 Security Operations Center (SOC) Analyst by collecting, analyzing, and correlating security events from multiple sources.
-
-The project combines Windows endpoint monitoring, Windows Security Event analysis, network traffic inspection, threat intelligence mapping, and a custom Python-based SOC Incident Analyzer to investigate simulated attack activity.
-
-The objective is to demonstrate practical Blue Team investigation techniques using widely adopted cybersecurity tools and industry best practices.
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-11-0078D6?style=flat-square&logo=windows&logoColor=white)
+![Sysmon](https://img.shields.io/badge/Sysmon-Endpoint%20Telemetry-informational?style=flat-square)
+![Wireshark](https://img.shields.io/badge/Wireshark-Network%20Analysis-1679A7?style=flat-square&logo=wireshark&logoColor=white)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-red?style=flat-square)
+![VMware](https://img.shields.io/badge/VMware-Workstation%20Pro-607078?style=flat-square&logo=vmware&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=flat-square)
 
 ---
 
-# 🎯 Project Objectives
+## 📌 Project Overview
 
-- Monitor Windows endpoint activity using Sysmon
-- Analyze Windows Security Events
-- Capture and inspect network traffic using Wireshark
-- Simulate reconnaissance using Kali Linux and Nmap
-- Correlate endpoint, authentication, and network logs
-- Extract Indicators of Compromise (IOCs)
-- Map detections to the MITRE ATT&CK Framework
-- Generate structured incident reports
+This project simulates a **SOC (Security Operations Center) investigation workflow** in a controlled, isolated virtual lab. A Windows 11 endpoint was monitored using Sysmon and Windows Event Logs, while network traffic was captured and inspected with Wireshark. A separate Kali Linux machine was used to run controlled reconnaissance activity (Nmap) against the monitored endpoint.
+
+All collected logs were processed using a custom-built **Python SOC Incident Analyzer**, which correlates activity across endpoint, network, and authentication log sources, extracts Indicators of Compromise (IOCs), maps observed behavior to the **MITRE ATT&CK** framework, and produces a risk-scored incident summary.
+
+The goal of this project is to demonstrate a realistic, analyst-style approach to **log collection, correlation, and triage** — the core skill set of a Tier 1/2 SOC analyst — using open-source tooling and a fully self-contained lab environment.
+
+A single log rarely tells the full story. The value in this project comes from connecting events across sources — for example, tying a process starting on the endpoint to a network connection that follows seconds later. That connection is what turns raw logs into an actual investigation.
 
 ---
 
-# 🏗️ Project Workflow
+## 🧭 Architecture / Workflow
 
-```text
-Attacker (Kali Linux)
-        │
-        ▼
-Nmap Reconnaissance Scan
-        │
-        ▼
-Windows Target Machine
-        │
-        ├── Sysmon Logs
-        ├── Windows Security Events
-        └── Network Connections
-               │
-               ▼
-Wireshark Packet Capture
-               │
-               ▼
-SOC Incident Analyzer (Python)
-               │
-               ├── Log Correlation
-               ├── IOC Extraction
-               ├── Risk Scoring
-               ├── MITRE ATT&CK Mapping
-               └── Incident Report Generation
+```
+┌─────────────────────┐         ┌──────────────────────┐
+│   Kali Linux (VM)    │  Nmap   │   Windows 11 (VM)     │
+│   Simulated Source   │───────▶│   Monitored Endpoint  │
+│                       │  Scan   │                        │
+└─────────────────────┘         └───────────┬───────────┘
+                                             │
+                     ┌───────────────────────┼───────────────────────┐
+                     ▼                       ▼                       ▼
+              ┌─────────────┐        ┌──────────────┐        ┌──────────────┐
+              │   Sysmon    │        │ Windows Event│        │  Wireshark   │
+              │ (Proc/Net)  │        │ Log (4624/25)│        │ (Packet Cap) │
+              └──────┬──────┘        └──────┬───────┘        └──────┬───────┘
+                     │                      │                       │
+                     └──────────────┬───────┴───────────────────────┘
+                                     ▼
+                       ┌─────────────────────────────┐
+                       │  Python SOC Incident Analyzer│
+                       │  • Log Correlation            │
+                       │  • Timeline Reconstruction     │
+                       │  • IOC Extraction               │
+                       │  • MITRE ATT&CK Mapping          │
+                       │  • Risk Scoring                   │
+                       └───────────────┬───────────────┘
+                                       ▼
+                         ┌───────────────────────────┐
+                         │   SOC Incident Report      │
+                         │   (Findings + Risk Score)  │
+                         └───────────────────────────┘
 ```
 
 ---
 
-# 📊 Project Results
+## ✨ Features
 
-- ✅ Successfully monitored endpoint activity using Sysmon
-- ✅ Captured and analyzed Windows Security Events
-- ✅ Correlated endpoint, authentication, and network logs
-- ✅ Detected **9 simulated security incidents**
-- ✅ Extracted **13 Indicators of Compromise (IOCs)**
-- ✅ Calculated an overall **HIGH** risk score (**69/100**)
-- ✅ Generated automated incident reports
-- ✅ Mapped detected activity to the MITRE ATT&CK Framework
-
----
-
-# 🛠️ Technologies Used
-
-| Category | Technology |
-|----------|------------|
-| Operating System | Windows 11 |
-| Endpoint Monitoring | Sysmon |
-| Log Analysis | Windows Event Viewer |
-| Network Analysis | Wireshark |
-| Attack Simulation | Kali Linux |
-| Reconnaissance | Nmap |
-| Programming | Python |
-| Virtualization | VMware Workstation Pro |
-| Threat Intelligence | MITRE ATT&CK |
+- 🔍 Endpoint telemetry collection via Sysmon (process creation, network connections)
+- 🪵 Windows Event Log analysis for authentication activity (Event ID 4624, 4625)
+- 📡 Network traffic capture and inspection using Wireshark
+- 🎯 Controlled reconnaissance simulation using Kali Linux and Nmap
+- 🔗 Cross-source log correlation — endpoint, network, and authentication data combined into a single timeline to see how one event leads to the next
+- 🧬 Automated extraction of Indicators of Compromise (IOCs) from correlated logs
+- 🗺️ MITRE ATT&CK technique mapping for observed activity
+- 📊 Weighted risk scoring based on detected findings
+- 📄 Automated incident report generation
+- 🧪 Fully isolated virtual lab with no external network exposure
 
 ---
 
-# 🚨 Key Features
+## 🧰 Tools & Technologies
 
-- Endpoint Monitoring
-- Windows Event Analysis
-- Network Packet Analysis
-- Log Correlation
-- IOC Extraction
-- Risk Score Calculation
-- MITRE ATT&CK Mapping
-- Attack Timeline Correlation
-- Live SOC Dashboard
-- Automated Incident Report Generation
+| Category | Tool | Purpose |
+|---|---|---|
+| Virtualization | VMware Workstation Pro | Isolated lab environment |
+| Target OS | Windows 11 | Monitored endpoint |
+| Source OS | Kali Linux | Controlled reconnaissance simulation |
+| Endpoint Monitoring | Sysmon | Process and network telemetry |
+| Log Source | Windows Event Viewer | Authentication event logging |
+| Network Analysis | Wireshark | Packet capture and traffic inspection |
+| Reconnaissance | Nmap | Port scanning / service discovery |
+| Automation | Python 3 | Custom SOC Incident Analyzer |
+| Detection Framework | MITRE ATT&CK | Technique mapping and classification |
 
 ---
 
-# 📂 Repository Structure
+## 📈 Project Results
 
-```text
-SOC-Alert-Monitoring-Capstone
-│
-├── docs
-│   ├── SOC_Capstone_Report.docx
-│   ├── SOC_Capstone_Presentation.pdf
-│   └── SOC_Capstone_Presentation.pptx
-│
-├── Screenshots
-│
-├── SOC_Incident_Analyzer_v4
-│   ├── main.py
-│   ├── dashboard.py
-│   ├── parser.py
-│   ├── report_generator.py
-│   ├── soc_engine.py
-│   ├── utils.py
-│   ├── sample_logs.txt
-│   ├── mitre_mapping.json
-│   ├── config.json
-│   └── requirements.txt
-│
-└── README.md
+| Metric | Result |
+|---|---|
+| **Incidents Detected** | 9 |
+| **IOCs Extracted** | 13 |
+| **Overall Risk Score** | 🔴 69 / 100 — **HIGH** |
+| **Log Sources Correlated** | Sysmon, Windows Event Logs, Wireshark |
+
+Findings included reconnaissance activity from network scanning, PowerShell script execution on the endpoint, repeated failed logon attempts, and suspicious outbound connection activity flagged during correlation. These findings were combined into a single weighted risk score reflecting overall incident severity.
+
+None of these findings looked alarming on their own — a scan, a script, a failed login. What raised the risk score was the pattern: recon followed by execution, execution followed by an outbound connection, all on the same host within a short window. That sequence is why the score landed in the HIGH range.
+
+---
+
+## 🗺️ MITRE ATT&CK Mapping
+
+| Technique ID | Technique Name | Observed Activity |
+|---|---|---|
+| T1046 | Network Service Discovery | Nmap scan activity against the monitored endpoint |
+| T1059 | Command and Scripting Interpreter | PowerShell execution observed on the endpoint |
+| T1110 | Brute Force | Repeated failed logon attempts (Event ID 4625) |
+| Discovery Activity | Network Scanning | Port and service enumeration detected via Wireshark capture |
+
+> Mappings are limited to activity directly observed in the collected logs. No persistence, command-and-control, or advanced exploitation techniques were confirmed in this project.
+
+---
+
+## 🕵️ SOC Attack Case Studies
+
+Three example investigations from this lab, written the way an analyst would walk through them.
+
+### Case 1 — Network Port Scan (Reconnaissance)
+
+- **Source activity:** Kali Linux ran an Nmap TCP connect scan against the Windows 11 host.
+- **Logs observed:** Wireshark showed repeated SYN packets from the same source IP hitting multiple ports (135, 139, 445) within seconds. Sysmon Event ID 3 logged the matching inbound connection attempts.
+- **How it was detected:** One connection attempt isn't unusual. Many ports getting hit by the same source in a few seconds is. That pattern is what flagged it as a scan, not normal traffic.
+- **MITRE ATT&CK:** T1046 – Network Service Discovery
+- **Conclusion:** Confirmed reconnaissance scan against the endpoint. No follow-up exploitation was observed immediately after.
+
+### Case 2 — Repeated Failed Logons
+
+- **Source activity:** Multiple failed login attempts were made against the Windows 11 host in a short time span.
+- **Logs observed:** Windows Event Viewer showed several Event ID 4625 (failed logon) entries back-to-back, followed by an Event ID 4624 (successful logon).
+- **How it was detected:** A few failed logons happen normally. A burst of failed attempts immediately followed by a success is the pattern that stands out — it looks like guessing that eventually landed.
+- **MITRE ATT&CK:** T1110 – Brute Force
+- **Conclusion:** Flagged as suspicious logon behavior. Recommended reviewing account lockout policy and the account involved.
+
+### Case 3 — PowerShell Execution Followed by Outbound Connection
+
+- **Source activity:** A PowerShell process was launched on the endpoint, followed shortly after by an outbound network connection.
+- **Logs observed:** Sysmon Event ID 1 logged `powershell.exe` process creation. Sysmon Event ID 3 and the Wireshark capture showed an outbound connection starting within seconds of that process launch.
+- **How it was detected:** The process alone isn't suspicious — PowerShell runs constantly on Windows. What made it worth flagging was the timing: a script starting and then the host reaching out over the network right after, which isn't normal for routine admin activity.
+- **MITRE ATT&CK:** T1059 – Command and Scripting Interpreter
+- **Conclusion:** Flagged as suspicious outbound connection activity tied to script execution. This was the highest-severity finding in the investigation and is covered in the sample report below.
+
+---
+
+## 📄 Sample Incident Report Output
+
+Example of a single incident record as generated by the Python SOC Incident Analyzer.
+
+```
+Incident ID:      INC-0013
+Severity:         High
+Attack Type:      Suspicious PowerShell Execution + Outbound Connection
+
+Timeline:
+  10:42:03  Sysmon (Event ID 1)  powershell.exe launched on endpoint
+  10:42:07  Sysmon (Event ID 3)  Outbound network connection initiated
+  10:42:07  Wireshark            Outbound traffic confirmed on capture
+
+Evidence Summary:
+  - Sysmon Event ID 1: powershell.exe process creation logged on host
+  - Sysmon Event ID 3: outbound connection logged 4 seconds later
+  - Wireshark capture: matching outbound packet confirms the connection
+  - No corresponding scheduled task or known admin activity at this time
+
+MITRE ATT&CK Mapping:
+  T1059 – Command and Scripting Interpreter
+
+Recommendation:
+  - Isolate the endpoint for further review
+  - Check the PowerShell command line / script block logs for content
+  - Confirm whether this activity was authorized (admin, script, or user)
+  - Monitor the destination IP for further outbound activity
 ```
 
 ---
 
-# 📸 Project Screenshots
+## 🖼️ Screenshots
 
-## Windows Endpoint Monitoring
+### Lab Setup & Reconnaissance
 
-![Sysmon Process Creation](Screenshots/03_Sysmon_EventID1_Process_Creation.png.png)
+| Windows IP Configuration | Kali Nmap Scan |
+|---|---|
+| ![Windows IP Config](Screenshots/01_Windows_IP_Config.png.webp) | ![Kali Nmap Scan](Screenshots/02_Kali_Nmap_Scan.png.png) |
 
----
+### Endpoint & Network Telemetry
 
-## Network Traffic Analysis
+| Sysmon — Process Creation (Event ID 1) | Sysmon — Network Connection (Event ID 3) |
+|---|---|
+| ![Sysmon Event ID 1](Screenshots/03_Sysmon_EventID1_Process_Creation.png.png) | ![Sysmon Event ID 3](Screenshots/04_Sysmon_EventID3_Network_Connection.png.webp) |
 
-![Wireshark](Screenshots/07_Wireshark_TCP_Handshake.png.png)
+| Failed Logon (Event ID 4625) | Successful Logon (Event ID 4624) |
+|---|---|
+| ![Failed Logon](Screenshots/05_EventID4625_Failed_Logon.png.jpeg) | ![Successful Logon](Screenshots/06_EventID4624_Successful_Logon.png.jpeg) |
 
----
+| Wireshark TCP Handshake |
+|---|
+| ![Wireshark TCP Handshake](Screenshots/07_Wireshark_TCP_Handshake.png.png) |
 
-## SOC Incident Analyzer Dashboard
+### SOC Incident Analyzer (Tool)
 
-![Dashboard](Screenshots/10_IncidentAnalyzer_Dashboard.png.jpeg)
+| Main Menu | Log Analysis |
+|---|---|
+| ![Analyzer Main Menu](Screenshots/08_IncidentAnalyzer_Main_Menu.png.jpeg) | ![Analyzer Log Analysis](Screenshots/09_IncidentAnalyzer_Log_Analysis.png.jpeg) |
 
----
+| Dashboard | MITRE ATT&CK Mapping |
+|---|---|
+| ![Analyzer Dashboard](Screenshots/10_IncidentAnalyzer_Dashboard.png.jpeg) | ![Analyzer MITRE Mapping](Screenshots/11_IncidentAnalyzer_MITRE_Mapping.png.jpeg) |
 
-## MITRE ATT&CK Mapping
+### Generated Incident Report
 
-![MITRE Mapping](Screenshots/11_IncidentAnalyzer_MITRE_Mapping.png.jpeg)
+| Executive Summary | Incident Summary |
+|---|---|
+| ![Report Executive Summary](Screenshots/12_Report_Executive_Summary.png.jpeg) | ![Report Incident Summary](Screenshots/13_Report_Incident_Summary.png.jpeg) |
 
----
-
-## Executive Summary
-
-![Executive Summary](Screenshots/12_Report_Executive_Summary.png.jpeg)
-
----
-
-# 🧠 MITRE ATT&CK Mapping
-
-Example techniques detected during analysis:
-
-| Technique | Description |
-|-----------|-------------|
-| T1071.001 | Application Layer Protocol |
-| T1547 | Registry Run Keys / Startup Folder |
-| T1059 | Command and Scripting Interpreter |
-| T1046 | Network Service Discovery |
-
----
-
-# 📊 SOC Incident Analyzer
-
-The custom Python SOC Incident Analyzer provides:
-
-- Log Parsing
-- Security Event Classification
-- Incident Detection
-- IOC Extraction
-- Attack Timeline Correlation
-- Risk Score Calculation
-- MITRE ATT&CK Mapping
-- Executive Summary Generation
-- Automated Incident Report Creation
+| Indicators of Compromise | Conclusion |
+|---|---|
+| ![Report IOCs](Screenshots/14_Report_IOCs.png.jpeg) | ![Report Conclusion](Screenshots/15_Report_Conclusion.png.jpeg) |
 
 ---
 
-# 🚀 Running the Project
+## ⚙️ How to Run
 
+**1. Clone the repository**
 ```bash
-git clone https://github.com/kshitijj/SOC-Alert-Monitoring-Capstone.git
+git clone https://github.com/kshitij333/soc-alert-monitoring-capstone.git
+cd soc-alert-monitoring-capstone
+```
 
-cd SOC-Alert-Monitoring-Capstone/SOC_Incident_Analyzer_v4
-
+**2. Install dependencies**
+```bash
 pip install -r requirements.txt
+```
 
-python main.py
+**3. Add your raw log exports**
+```bash
+# Place exported logs into the /logs directory:
+#   - sysmon_logs.evtx / .csv
+#   - security_event_logs.evtx / .csv
+#   - network_capture.pcap
+```
+
+**4. Run the SOC Incident Analyzer**
+```bash
+python soc_incident_analyzer.py --input ./logs --output ./reports
+```
+
+**5. Review the generated report**
+```bash
+# Output includes:
+#   - Correlated incident timeline
+#   - Extracted IOCs
+#   - MITRE ATT&CK mapping
+#   - Final risk score
+cat reports/incident_report.md
 ```
 
 ---
 
-# 💼 Skills Demonstrated
+## 🎓 Skills Demonstrated
 
-- Security Operations Center (SOC)
-- Blue Team Operations
-- Endpoint Monitoring
-- Windows Security
-- Log Correlation
-- Threat Detection
-- Incident Response
-- IOC Analysis
-- Network Traffic Analysis
-- Python Automation
-- MITRE ATT&CK Framework
-- Security Reporting
-
----
-
-# 📈 Project Outcome
-
-This project demonstrates an end-to-end SOC investigation workflow by integrating endpoint monitoring, authentication log analysis, network traffic inspection, IOC extraction, MITRE ATT&CK mapping, and automated incident reporting into a unified defensive security solution.
-
-The project reflects practical SOC analyst responsibilities and showcases analytical, investigative, and reporting skills expected in entry-level cybersecurity roles.
+- SOC Tier 1/2 investigation and triage workflow
+- Endpoint monitoring and analysis using Sysmon
+- Windows authentication log review
+- Network traffic analysis and packet inspection
+- Controlled attack simulation and log-based detection
+- Multi-source log correlation and timeline reconstruction
+- IOC identification and documentation
+- MITRE ATT&CK framework application
+- Risk-based incident prioritization
+- Security automation using Python
+- Technical incident report writing
 
 ---
 
-# 🔮 Future Enhancements
+## 🚀 Future Improvements
 
-- Microsoft Sentinel Integration
-- Splunk Log Ingestion
-- Sigma Rule Detection
-- YARA Rule Support
-- Threat Intelligence API Integration
-- Automated Email Alerts
-- Interactive Web Dashboard
-
----
-
-# 📄 License
-
-This project is intended for educational and portfolio purposes.
+- SIEM integration (Splunk / Microsoft Sentinel) for centralized log management
+- Real-time log ingestion instead of static/batch log analysis
+- Sigma rule development for standardized detection logic
+- YARA rule integration for file-based indicator matching
+- Expanded log sources (firewall, proxy)
+- Dashboard visualization for incident and risk trends
 
 ---
 
-# 👨‍💻 Author
+## 👤 Author
 
-**Kshitij**
+**Kshitij Rajesh Randhire**
+Cybersecurity | SOC Analysis & Detection Engineering
 
-Cybersecurity Enthusiast • Blue Team • SOC Analyst Aspirant
+📧 [kshitij.randhire@gmail.com](mailto:kshitij.randhire@gmail.com)
+💻 [GitHub — kshitij333](https://github.com/kshitij333)
 
 ---
 
-⭐ **If you found this project useful, consider giving it a Star!**
+⭐ If you found this project useful, consider giving it a star.
