@@ -291,11 +291,11 @@ cat reports/incident_report.md
 
 ## 👤 Author
 
-**Kshitij Rajesh Randhire**
-Cybersecurity | SOC Analysis & Detection Engineering
+**Kshitij Rajesh Randhire**  
+SOC Analyst Aspirant | Cybersecurity Enthusiast  
 
-📧 [kshitij.randhire@gmail.com](mailto:kshitij.randhire@gmail.com)
-💻 [GitHub — kshitij333](https://github.com/kshitij333)
+📧 kshitij.randhire@gmail.com  
+💻 GitHub: https://github.com/kshitij-soc
 
 ---
 
