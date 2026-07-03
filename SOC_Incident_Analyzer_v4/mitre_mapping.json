@@ -1,0 +1,106 @@
+{
+  "1": {
+    "category": "Process Creation",
+    "default": {
+      "technique_id": "T1059",
+      "technique_name": "Command and Scripting Interpreter",
+      "severity": "Medium",
+      "description": "A new process was created. Sysmon Event ID 1 captures process creation with full command line. Review image name and command line for signs of abuse.",
+      "recommendation": "Review parent process, command line, and spawning user. Investigate if the process is unexpected for this host."
+    },
+    "process_rules": [
+      {
+        "keyword": "powershell",
+        "technique_id": "T1059.001",
+        "technique_name": "PowerShell",
+        "severity": "High",
+        "description": "PowerShell was executed. Encoded or hidden commands (-enc, -nop, -w hidden) are strong indicators of malicious scripting activity.",
+        "recommendation": "Decode the base64 command. Review PowerShell logs (Event 4103/4104). Block if policy violation; escalate to Tier-2 if encoded."
+      },
+      {
+        "keyword": "cmd.exe",
+        "technique_id": "T1059.003",
+        "technique_name": "Windows Command Shell",
+        "severity": "Medium",
+        "description": "cmd.exe was executed with command arguments. Attackers use cmd.exe to run reconnaissance or lateral movement commands.",
+        "recommendation": "Review the full command line. Correlate with other events on the same host. Block suspicious commands."
+      },
+      {
+        "keyword": "reg.exe",
+        "technique_id": "T1547",
+        "technique_name": "Registry Run Keys / Startup Folder",
+        "severity": "High",
+        "description": "reg.exe was used to modify the registry. Persistence is commonly established by adding entries to Run keys in HKCU or HKLM.",
+        "recommendation": "Examine the registry key and value being modified. Remove unauthorized persistence entries. Scan the executable referenced in the value."
+      },
+      {
+        "keyword": "explorer.exe",
+        "technique_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "severity": "Low",
+        "description": "explorer.exe was launched. This is the Windows shell and is typically benign when spawned by a normal user session.",
+        "recommendation": "Verify this was spawned by a user action. Investigate only if parent process is unusual (e.g., spawned by cmd.exe or PowerShell)."
+      }
+    ]
+  },
+  "3": {
+    "category": "Network Connection",
+    "default": {
+      "technique_id": "T1071",
+      "technique_name": "Application Layer Protocol",
+      "severity": "Medium",
+      "description": "A network connection was initiated. Sysmon Event ID 3 captures outbound connections including destination IP and initiating process.",
+      "recommendation": "Verify the destination IP reputation. Investigate if connection is initiated by an unexpected process. Check for external IPs in threat intel."
+    },
+    "process_rules": [
+      {
+        "keyword": "powershell",
+        "technique_id": "T1071.001",
+        "technique_name": "Web Protocols – C2 Callback",
+        "severity": "Critical",
+        "description": "PowerShell established a network connection. This is a strong indicator of a C2 callback. Attackers often use PowerShell to download payloads or beacon to C2 servers.",
+        "recommendation": "Block the destination IP immediately. Isolate the host. Acquire memory and disk forensic image. Escalate to Tier-2 incident response."
+      }
+    ]
+  },
+  "4624": {
+    "category": "Authentication Success",
+    "default": {
+      "technique_id": "T1078",
+      "technique_name": "Valid Accounts",
+      "severity": "Low",
+      "description": "A successful logon event was recorded. Review source IP and account type. After failed logon activity, a successful logon may indicate account compromise.",
+      "recommendation": "Correlate with prior failed logon events. If preceded by brute force activity, treat as possible account compromise and reset credentials."
+    }
+  },
+  "4625": {
+    "category": "Authentication Failure",
+    "default": {
+      "technique_id": "T1110",
+      "technique_name": "Brute Force",
+      "severity": "Medium",
+      "description": "A failed logon attempt was recorded. Isolated failures may be benign (mistyped password). Multiple failures from the same IP suggest brute force or credential stuffing.",
+      "recommendation": "Monitor for repeated failures. Enable account lockout policy. Block the source IP if failures exceed threshold."
+    }
+  },
+  "7": {
+    "category": "Image Loaded",
+    "default": {
+      "technique_id": "T1055",
+      "technique_name": "Process Injection",
+      "severity": "High",
+      "description": "A driver or DLL was loaded into a process. Sysmon Event ID 7 captures image loads. Suspicious or unsigned DLLs indicate DLL injection or hijacking.",
+      "recommendation": "Check the DLL signature and path. Investigate if loaded by an unexpected process. Quarantine and analyze the DLL. Check VirusTotal hash."
+    }
+  },
+  "unknown": {
+    "category": "Unmapped Event",
+    "default": {
+      "technique_id": "N/A",
+      "technique_name": "Unmapped Technique",
+      "severity": "Low",
+      "description": "This Event ID is not yet mapped in mitre_mapping.json.",
+      "recommendation": "Add this Event ID to mitre_mapping.json to enable automatic classification."
+    }
+  }
+}

@@ -1,0 +1,3 @@
+# SOC Incident Analyzer v3.0
+# Standard Library only — no third-party packages required.
+# Tested on Python 3.9+

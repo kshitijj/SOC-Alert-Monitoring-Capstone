@@ -1,0 +1,14 @@
+{
+  "risk_thresholds": {
+    "low_max": 25,
+    "medium_max": 50,
+    "high_max": 75
+  },
+  "timeline_window_seconds": 120,
+  "brute_force_threshold": 3,
+  "file_paths": {
+    "sample_logs": "sample_logs.txt",
+    "mitre_mapping": "mitre_mapping.json",
+    "incident_report": "incident_report.txt"
+  }
+}
